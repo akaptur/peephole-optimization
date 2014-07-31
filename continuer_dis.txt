@@ -1,0 +1,52 @@
+>>> dis.dis(continuer)
+ 14           0 LOAD_CONST               1 (0)
+              3 DUP_TOP
+              4 STORE_FAST               0 (a)
+              7 DUP_TOP
+              8 STORE_FAST               1 (b)
+             11 STORE_FAST               2 (c)
+
+ 15          14 SETUP_LOOP              79 (to 96)
+             17 LOAD_GLOBAL              0 (range)
+             20 LOAD_CONST               2 (100)
+             23 CALL_FUNCTION            1
+             26 GET_ITER
+        >>   27 FOR_ITER                65 (to 95)
+             30 STORE_FAST               3 (n)
+
+ 16          33 LOAD_FAST                3 (n)
+             36 LOAD_CONST               3 (2)
+             39 BINARY_MODULO
+             40 POP_JUMP_IF_FALSE       72
+
+ 17          43 LOAD_FAST                3 (n)
+             46 LOAD_CONST               4 (4)
+             49 BINARY_MODULO
+             50 POP_JUMP_IF_FALSE       27
+
+ 18          53 LOAD_FAST                0 (a)
+             56 LOAD_CONST               5 (1)
+             59 INPLACE_ADD
+             60 STORE_FAST               0 (a)
+             63 JUMP_ABSOLUTE           27
+
+ 19          66 JUMP_ABSOLUTE           27
+             69 JUMP_FORWARD            10 (to 82)
+
+ 21     >>   72 LOAD_FAST                1 (b)
+             75 LOAD_CONST               5 (1)
+             78 INPLACE_ADD
+             79 STORE_FAST               1 (b)
+
+ 22     >>   82 LOAD_FAST                2 (c)
+             85 LOAD_CONST               5 (1)
+             88 INPLACE_ADD
+             89 STORE_FAST               2 (c)
+             92 JUMP_ABSOLUTE           27
+        >>   95 POP_BLOCK
+
+ 24     >>   96 LOAD_FAST                0 (a)
+             99 LOAD_FAST                1 (b)
+            102 LOAD_FAST                2 (c)
+            105 BUILD_TUPLE              3
+            108 RETURN_VALUE
