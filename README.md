@@ -34,4 +34,23 @@ To explore:
 
 4. Read through `example3.py`, then run `coverage2.py` on it.  What happened? Look at `continuer_dis.txt` and notice that the `continue` line *does* appear in the disassembly. Why doesn't it appear to be executed?
 
-5. The `continue` line isn't executed because of a compiler optimization - the bytecode that `dis` is showing us isn't the bytecode that's actually being executed. (true?) The compiler notices that two instructions in a row are jumps, and it combines these two hops into one larger jump. So, in a very real sense, the `continue` line didn't actually execute - it was optimized out - even though the logic contained in the `continue` did actually happen.
+5. The `continue` line isn't executed because of a compiler optimization - this bytecode that we're looking at has already been optimzed. In this particular optimization, the compiler notices that two instructions in a row are jumps, and it combines these two hops into one larger jump. So, in a very real sense, the `continue` line didn't actually execute - it was optimized out - even though the logic contained in the `continue` did actually happen. This is one of several optimizations known as peephole optimizations because they operate on a small chunk of the bytecode at one time. The other optimations, including some simpler ones like constant folding on binary operations, are implemented in [peephole.c](http://hg.python.org/cpython/file/118d6f49d6d6/Python/peephole.c).
+
+    An example of constant folding:
+    ~~~~.py
+        >>> def foo():
+        ...     return 1 + 2
+        ...
+        >>> import dis
+        >>> dis.dis(foo)
+          2           0 LOAD_CONST               3 (3)
+                      3 RETURN_VALUE
+    ~~~~
+
+6. Go back to `continuer_dis.txt` and trace through the jumps carefully. Here are some things you'll need to know:
+  * The second column is the index in the bytecode, the third is the byte name, and the fourth is the argument.  The fifth is sometimes a hint about the meaning of the argument.
+  * `POP_JUMP_IF_FALSE`, `POP_JUMP_IF_TRUE`, and `JUMP_ABSOLUTE` have the jump target as their argument. So, e.g. `POP_JUMP_IF_TRUE 27` means "if the popped expression is true, jump to position 27."
+  * `JUMP_FORWARD`'s argument specifies the distance to jump forward in the bytecode, and the fifth column shows where the jump will end.
+  * When an interator is done, `FOR_ITER` jumps forward the number of bytes specified in its argument.
+
+  Notice that no matter how hard you try, you couldn't end up on bytes 66 or 69, the two that belong to line 19. This line of code is unreachable after the optimizations are finished.
