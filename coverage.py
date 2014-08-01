@@ -1,19 +1,8 @@
 import sys
+import tests
 import inspect
-from example import iffer, looper
 
-def test_iffer():
-    assert iffer(True) == 3
-    assert iffer(False) == 10
-
-def test_looper():
-    assert looper() == 45
-
-def run_tests():
-    test_iffer()
-    test_looper()
-
-class Coverage(object):
+class TinyCoverage(object):
     def __init__(self, file_to_watch):
         self.source_file = file_to_watch
         self.source_code = open(file_to_watch).readlines()
@@ -34,7 +23,7 @@ class Coverage(object):
         for line_num in range(1, len(self.source_code)+1):
             if line_num not in self.executed_code:
                 src = self.source_code[line_num - 1]
-                if src != "\n" and 'else' not in src:
+                if src != "\n":
                     skipped.append(line_num)
         return skipped
 
@@ -47,8 +36,9 @@ class Coverage(object):
             print "100% coverage, go you!"
 
 if __name__ == '__main__':
-    t = Coverage('example.py')
+    t = TinyCoverage('example.py')
     sys.settrace(t.trace)
-    run_tests()
+    tests.run_tests()
     sys.settrace(None)
     t.report()
+
