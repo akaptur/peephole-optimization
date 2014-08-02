@@ -29,7 +29,9 @@ class TinyCoverage(object):
 
     def report(self):
         skipped = self.unexecuted_code()
+        percent_skipped = float(len(skipped)) / len(self.source_code)
         if skipped:
+            print "{} line(s) did not execute ({:.0%})".format(len(skipped), percent_skipped)
             for line_num in skipped:
                 print line_num, self.source_code[line_num - 1]
         else:

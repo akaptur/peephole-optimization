@@ -1,5 +1,5 @@
 import sys
-import tests
+import tests3
 import inspect
 
 class TinyCoverage(object):
@@ -29,16 +29,18 @@ class TinyCoverage(object):
 
     def report(self):
         skipped = self.unexecuted_code()
+        percent_skipped = float(len(skipped)) / len(self.source_code)
         if skipped:
+            # print "{} line(s) did not execute ({:.0%})".format(len(skipped), percent_skipped)
             for line_num in skipped:
-                print line_num, self.source_code[line_num - 1]
+                print(line_num, self.source_code[line_num - 1])
         else:
-            print "100% coverage, go you!"
+            print("100% coverage, go you!")
 
 if __name__ == '__main__':
-    t = TinyCoverage('example.py')
+    t = TinyCoverage('example3.py')
     sys.settrace(t.trace)
-    tests.run_tests()
+    tests3.run_tests()
     sys.settrace(None)
     t.report()
 
